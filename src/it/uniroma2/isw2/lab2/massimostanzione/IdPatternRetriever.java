@@ -1,6 +1,5 @@
 package it.uniroma2.isw2.lab2.massimostanzione;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,25 +55,27 @@ public class IdPatternRetriever {
 	}
 
 	public void local() throws IOException {
-		System.out.println("Metodo LOCALE (tramite shell git)");
+		System.out.println("LOCAL method, via git shell");
 		System.out.println("SHA-ID                                   Comment");
 		System.out.println("---------------------------------------------------------");
-		Process ip = Runtime.getRuntime().exec("git clone https://github.com/massimostanzione/ISW2-lab1");
+
+		Process ip = Runtime.getRuntime().exec("git clone https://github.com/" + this.getUser() + "/" + this.getRepo());
 		// opzione --pretty=online basta e avanza per la stampa richiesta (ID spazio
 		// messaggio)
-		ip = Runtime.getRuntime().exec("git --git-dir ./ISW2-lab1/.git log --pretty=oneline --grep=added");
+		ip = Runtime.getRuntime().exec("git --git-dir ./" + this.getRepo() + "/.git log --pretty=oneline --grep=added");
 		BufferedReader input = new BufferedReader(new InputStreamReader(ip.getInputStream()));
-		Scanner s = new java.util.Scanner(input).useDelimiter("\\A");// separa righe
+		Scanner s = new Scanner(input).useDelimiter("\\A");// separa righe
+
 		String val = "";
 		val = s.hasNext() ? s.next() : "";
 		System.out.println(val);
-		Runtime.getRuntime().exec("rmdir ISW2-lab1"); // gira senza sudo?
+		Runtime.getRuntime().exec("rm -rf ./" + this.getRepo());
 	}
 
 	public void remote() throws IOException, JSONException {
-		System.out.println("Metodo REMOTO (tramite GitHub API)");
+		System.out.println("REMOTE method, via GitHub API");
 		Integer i = 0, total = 1;
-		String url = "https://api.github.com/repos/" + getUser() + "/" + this.getRepo() + "/commits";
+		String url = "https://api.github.com/repos/" + this.getUser() + "/" + this.getRepo() + "/commits";
 		JSONArray json = readJsonArrayFromUrl(url);
 		total = json.length() - 1;
 		System.out.println("SHA-ID                                   Comment");
