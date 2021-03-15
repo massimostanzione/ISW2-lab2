@@ -54,22 +54,24 @@ public class IdPatternRetriever {
 		}
 	}
 
-	public void local() throws IOException {
+	public void local() throws IOException, InterruptedException {
 		System.out.println("LOCAL method, via git shell");
-		System.out.println("SHA-ID                                   Comment");
-		System.out.println("---------------------------------------------------------");
 
 		Process ip = Runtime.getRuntime().exec("git clone https://github.com/" + this.getUser() + "/" + this.getRepo());
 		// opzione --pretty=online basta e avanza per la stampa richiesta (ID spazio
 		// messaggio)
-		ip = Runtime.getRuntime().exec("git --git-dir ./" + this.getRepo() + "/.git log --pretty=oneline --grep=added");
+		ip.waitFor();
+		ip = Runtime.getRuntime().exec("git --git-dir ./" + this.getRepo() + "/.git log --pretty=oneline --grep="+this.getPattern());
+		ip.waitFor();
 		BufferedReader input = new BufferedReader(new InputStreamReader(ip.getInputStream()));
 		Scanner s = new Scanner(input).useDelimiter("\\A");// separa righe
-
 		String val = "";
 		val = s.hasNext() ? s.next() : "";
+		System.out.println("SHA-ID                                   Comment");
+		System.out.println("---------------------------------------------------------");
 		System.out.println(val);
-		Runtime.getRuntime().exec("rm -rf ./" + this.getRepo());
+		ip=Runtime.getRuntime().exec("rm -rf " + this.getRepo());
+		ip.waitFor();
 	}
 
 	public void remote() throws IOException, JSONException {
