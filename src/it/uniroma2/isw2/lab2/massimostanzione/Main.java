@@ -19,11 +19,10 @@ public class Main {
 			System.out.println("Repository name:\t\t" + ipr.getRepo());
 			System.out.println("Pattern to find in the message: \"" + ipr.getPattern() + "\"\n");
 			System.out.println("Which method you want to use?");
-			System.out.println("1 - Local, via git shell (*)");
+			System.out.println("1 - Local, via git shell");
 			System.out.println("2 - Remote, via GitHub API");
-			System.out.println("3 - Both (*)");
+			System.out.println("3 - Both");
 			System.out.println("4 - Change parameters\n");
-			System.out.println("(*) NOTICE: option no. 1-3 will clone the selected repository without deleting the working copy.\n");
 			System.out.println("Insert your chosen method: ");
 			Integer scelta = inScan.nextInt();
 			System.out.println("=========================================================\n");
